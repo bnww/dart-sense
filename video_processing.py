@@ -5,7 +5,7 @@ import numpy as np
 import time
 
 class VideoProcessing:
-    def __init__(self, model_dir="runs\\train180\\weights\\best.pt"):
+    def __init__(self, model_dir="weights.pt"):
         self.model = YOLO(model_dir)
         self.predict = GetScores(model_dir)
     
