@@ -238,7 +238,7 @@ class GUI:
         max_num = 0
         for file in os.listdir(dir):
             if file.startswith('dart_'):
-                file_num = int(file[5:-4])
+                file_num = int(file[10:-4])
                 max_num = max(max_num, file_num)
 
         new_num = str(max_num + 1)
@@ -252,7 +252,7 @@ class GUI:
         # transform from boardplane back to imageplane
 
         for dart in self.dart_coords_in_visit_imageplane:
-            label += f'4 {np.round(dart[0], 6)} {np.round(dart[1], 6)} 0.025 0.025\n'
+            label += f'4 {dart[0]} {dart[1]} 0.025 0.025\n'
         
         for i in range(len(self.calibration_coords)):
             if np.all(self.calibration_coords[i] != -1):
@@ -260,10 +260,15 @@ class GUI:
                     class_num = i+1
                 else:
                     class_num = i
-                label += f'{class_num} {np.round(self.calibration_coords[i][0], 6)} {np.round(self.calibration_coords[i][1], 6)} 0.025 0.025\n'
+                label += f'{class_num} {self.calibration_coords[i][0]} {self.calibration_coords[i][1]} 0.025 0.025\n'
             
         with open(label_path, 'w') as f:
             f.write(label)
+
+        gt_darts_path = os.path.join(dir.replace('images', 'gt_darts'), 'd8_'+ new_num + '.txt')
+        with open(gt_darts_path, 'w') as f:
+            for dart in self.video_processing.darts_in_visit:
+                f.write(f'{dart}\n')
         
         print(f'Saved image to {image_path}')
 

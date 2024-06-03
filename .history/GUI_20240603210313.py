@@ -252,7 +252,7 @@ class GUI:
         # transform from boardplane back to imageplane
 
         for dart in self.dart_coords_in_visit_imageplane:
-            label += f'4 {np.round(dart[0], 6)} {np.round(dart[1], 6)} 0.025 0.025\n'
+            label += f'4 {(dart[0], 6)} {(dart[1])} 0.025 0.025\n'
         
         for i in range(len(self.calibration_coords)):
             if np.all(self.calibration_coords[i] != -1):
