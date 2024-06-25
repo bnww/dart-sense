@@ -151,10 +151,6 @@ class GUI:
         self.visit_label.grid(column=5, row=2, sticky=W)
         
         self.display_type = StringVar(self.mainframe, value='imageplane')
-
-        self.display_predictions = BooleanVar(self.mainframe, True)
-        self.display_labels = BooleanVar(self.mainframe, False)
-        
         if not self.demo_mode.get():
             # radio buttons for display transformed, regular and live
             ttk.Label(self.mainframe, text="Display:", underline=0).grid(column=7, row=1, sticky=W)
@@ -181,11 +177,14 @@ class GUI:
             self.fps_label = ttk.Label(self.mainframe)
             self.fps_label.grid(column=7, row=self.scorer.num_players+4, sticky=W)
 
-            prediction_button = ttk.Checkbutton(self.mainframe, text="Predictions", variable=self.display_predictions, underline=0)
-            prediction_button.grid(column=1, row=self.scorer.num_players+4, columnspan=2, sticky=W)
+        self.display_predictions = BooleanVar(self.mainframe, True)
+        self.display_labels = BooleanVar(self.mainframe, False)
 
-            labels_button = ttk.Checkbutton(self.mainframe, text="Labels", underline=0, variable=self.display_labels)
-            labels_button.grid(column=2, row=self.scorer.num_players+4, columnspan=2, sticky=W)
+        prediction_button = ttk.Checkbutton(self.mainframe, text="Predictions", variable=self.display_predictions, underline=0)
+        prediction_button.grid(column=1, row=self.scorer.num_players+4, columnspan=2, sticky=W)
+
+        labels_button = ttk.Checkbutton(self.mainframe, text="Labels", underline=0, variable=self.display_labels)
+        labels_button.grid(column=2, row=self.scorer.num_players+4, columnspan=2, sticky=W)
 
         # assign key bindings for buttons
         self.root.bind('<Escape>', lambda e: self.root.quit())
