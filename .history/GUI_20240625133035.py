@@ -109,13 +109,6 @@ class GUI:
         self.heading_font = font.Font(family='Helvetica', size=12, underline=True)
         self.current_player_font = font.Font(family='Helvetica', size=12, weight='bold')
         self.text_font = font.Font(family='Helvetica', size=12)
-        
-        # change style for buttons to use Helvetica font
-        s = ttk.Style()
-        s.configure('TButton', font=('Helvetica', 9))
-        s.configure('TCheckbutton', font=('Helvetica', 9))
-        s.configure('TRadiobutton', font=('Helvetica', 9))
-        s.configure('TLabel', font=('Helvetica', 9))
 
         # scorecard
         ttk.Label(self.mainframe, text=f'Race to {self.scorer.num_legs}', font=self.heading_font).grid(column=1, row=1, sticky=W)
@@ -167,15 +160,15 @@ class GUI:
         labels_button.grid(column=2, row=self.scorer.num_players+4, columnspan=2, sticky=W)
         # add button for allowing user to add a dart that hasn't been detected
         add_button = ttk.Button(self.mainframe, text="Add dart", underline=0, command=lambda: self.video_processing.dart_coords_in_visit.append([0.5, 0.5]) if len(self.video_processing.dart_coords_in_visit) < 3 else None)
-        add_button.grid(column=6, row=1, sticky=W)
+        add_button.grid(column=6, row=1, sticky=N+S+E+W)
 
         # add button for committing score, in event of bounce-outs
         commit_button = ttk.Button(self.mainframe, text="Commit score", underline=0, command=lambda: setattr(self.video_processing, 'wait_for_dart_removal', True))
-        commit_button.grid(column=6, row=2, sticky=W)
+        commit_button.grid(column=6, row=3, sticky=N+S+E+W)
 
         # button for saving image and labels in YOLO format
         save_button = ttk.Button(self.mainframe, text="Save data", underline=0, command=self.save_data)
-        save_button.grid(column=6, row=3, sticky=W)
+        save_button.grid(column=6, row=2, sticky=N+S+E+W)
 
         # assign key bindings for buttons
         self.root.bind('<Escape>', lambda e: self.root.quit())

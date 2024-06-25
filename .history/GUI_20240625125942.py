@@ -95,6 +95,26 @@ class GUI:
         self.root.bind("<Return>", lambda e: add_player_names_button.invoke())
         self.root.mainloop()
     
+    def show_keyboard_shortcuts(self):
+        # open a new window showing keyboard shortcuts
+        shortcuts_window = Toplevel(self.root)
+        shortcuts_window.title("Keyboard Shortcuts")
+        
+        shortcuts_frame = ttk.Frame(shortcuts_window, padding="10")
+        shortcuts_frame.pack()
+        
+        ttk.Label(shortcuts_frame, text="Keyboard Shortcuts").grid(column=1, row=1, columnspan=2, pady=10)
+        ttk.Label(shortcuts_frame, text="Esc: Quit the program").grid(column=1, row=2, sticky=W)
+        ttk.Label(shortcuts_frame, text="D: Toggle between display modes").grid(column=1, row=3, sticky=W)
+        ttk.Label(shortcuts_frame, text="P: Toggle display of predictions").grid(column=1, row=4, sticky=W)
+        ttk.Label(shortcuts_frame, text="A: Add a dart manually").grid(column=1, row=5, sticky=W)
+        ttk.Label(shortcuts_frame, text="L: Toggle display of labels").grid(column=1, row=6, sticky=W)
+        ttk.Label(shortcuts_frame, text="S: Save data").grid(column=1, row=7, sticky=W)
+        ttk.Label(shortcuts_frame, text="Enter: Commit score").grid(column=1, row=8, sticky=W)
+        ttk.Label(shortcuts_frame, text="Up/Down/Left/Right: Move selected object").grid(column=1, row=9, sticky=W)
+        ttk.Label(shortcuts_frame, text="Delete: Delete selected object").grid(column=1, row=10, sticky=W)
+        
+        shortcuts_window.mainloop()
 
     def _game_screen(self):
         self.player_frame.destroy()
@@ -109,13 +129,6 @@ class GUI:
         self.heading_font = font.Font(family='Helvetica', size=12, underline=True)
         self.current_player_font = font.Font(family='Helvetica', size=12, weight='bold')
         self.text_font = font.Font(family='Helvetica', size=12)
-        
-        # change style for buttons to use Helvetica font
-        s = ttk.Style()
-        s.configure('TButton', font=('Helvetica', 9))
-        s.configure('TCheckbutton', font=('Helvetica', 9))
-        s.configure('TRadiobutton', font=('Helvetica', 9))
-        s.configure('TLabel', font=('Helvetica', 9))
 
         # scorecard
         ttk.Label(self.mainframe, text=f'Race to {self.scorer.num_legs}', font=self.heading_font).grid(column=1, row=1, sticky=W)
@@ -144,39 +157,37 @@ class GUI:
         self.visit_label.grid(column=5, row=2, sticky=W)
         
         # radio buttons for display transformed, regular and live
-        ttk.Label(self.mainframe, text="Display:", underline=0).grid(column=7, row=1, sticky=W)
         self.display_type = StringVar(self.mainframe, value='imageplane')
         original_button = ttk.Radiobutton(self.mainframe, text='Original', variable=self.display_type, value='imageplane')
         transform_button = ttk.Radiobutton(self.mainframe, text='Transformed', variable=self.display_type, value='boardplane')
         live_button = ttk.Radiobutton(self.mainframe, text='Live', variable=self.display_type, value='live')
 
-        original_button.grid(column=7, row=2, sticky=W)
-        transform_button.grid(column=7, row=3, sticky=W)
-        live_button.grid(column=7, row=4, sticky=W)
+        original_button.grid(column=6, row=4, sticky=W)
+        transform_button.grid(column=6, row=4, sticky=W)
+        live_button.grid(column=6, row=5, sticky=W)
 
         self.display_predictions = BooleanVar(self.mainframe, True)
         self.display_labels = BooleanVar(self.mainframe, True)
         
         self.fps_label = ttk.Label(self.mainframe)
-        self.fps_label.grid(column=7, row=self.scorer.num_players+4, sticky=W)
+        self.fps_label.grid(column=1, row=self.scorer.num_players+4, sticky=W)
 
-        prediction_button = ttk.Checkbutton(self.mainframe, text="Predictions", variable=self.display_predictions, underline=0)
-        prediction_button.grid(column=1, row=self.scorer.num_players+4, columnspan=2, sticky=W)
+        prediction_button = ttk.Checkbutton(self.mainframe, text="Predictions", variable=self.display_predictions)
+        prediction_button.grid(column=2, row=self.scorer.num_players+4, columnspan=2, sticky=W)
 
-        labels_button = ttk.Checkbutton(self.mainframe, text="Labels", underline=0, variable=self.display_labels)
-        labels_button.grid(column=2, row=self.scorer.num_players+4, columnspan=2, sticky=W)
+        labels_button = ttk.Checkbutton(self.mainframe, text="Labels", variable=self.display_labels)
+        labels_button.grid(column=4, row=self.scorer.num_players+4, columnspan=2, sticky=W)
         # add button for allowing user to add a dart that hasn't been detected
-        add_button = ttk.Button(self.mainframe, text="Add dart", underline=0, command=lambda: self.video_processing.dart_coords_in_visit.append([0.5, 0.5]) if len(self.video_processing.dart_coords_in_visit) < 3 else None)
-        add_button.grid(column=6, row=1, sticky=W)
+        add_button = ttk.Button(self.mainframe, text="Add dart", command=lambda: self.video_processing.dart_coords_in_visit.append([0.5, 0.5]) if len(self.video_processing.dart_coords_in_visit) < 3 else None)
+        add_button.grid(column=5, row=self.scorer.num_players+4, sticky=W)
+
+        save_button = ttk.Button(self.mainframe, text="Save data", command=self.save_data)
+        save_button.grid(column=6, row=1, sticky=W)
 
         # add button for committing score, in event of bounce-outs
-        commit_button = ttk.Button(self.mainframe, text="Commit score", underline=0, command=lambda: setattr(self.video_processing, 'wait_for_dart_removal', True))
+        commit_button = ttk.Button(self.mainframe, text="Commit score", command=lambda: setattr(self.video_processing, 'wait_for_dart_removal', True))
         commit_button.grid(column=6, row=2, sticky=W)
-
-        # button for saving image and labels in YOLO format
-        save_button = ttk.Button(self.mainframe, text="Save data", underline=0, command=self.save_data)
-        save_button.grid(column=6, row=3, sticky=W)
-
+        
         # assign key bindings for buttons
         self.root.bind('<Escape>', lambda e: self.root.quit())
         self.root.bind('d', lambda e: transform_button.invoke() if self.display_type.get() == 'imageplane' else original_button.invoke() if self.display_type.get() == 'live' else live_button.invoke())
