@@ -14,6 +14,7 @@ from PIL import ImageTk, Image
 
 class GUI:
     def __init__(self):
+        self.display_size = 720
         self.video_processing = VideoProcessing()
         self.predict = GetScores()
         
@@ -105,11 +106,6 @@ class GUI:
     def _game_screen(self):
         self.player_frame.destroy()
 
-        if self.demo_mode.get():
-            self.display_size = 500
-        else:
-            self.display_size = 720
-
         self.mainframe = ttk.Frame(self.root, padding="3 3 12 12") # encompasses all parts of the UI
         self.mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
         #self.mainframe.columnconfigure(0, weight=1)
@@ -151,7 +147,7 @@ class GUI:
         if self.demo_mode.get():
             self.dart_colours = ['cyan'] * 3
         else:
-            self.dart_colours = ['cyan', 'yellow', 'deep pink']
+        self.dart_colours = ['cyan', 'yellow', 'deep pink']
         self.graphics_font = font.Font(family='Helvetica', size=10, weight='bold')
 
         self.visit_label = ttk.Label(self.mainframe, font=self.current_player_font)

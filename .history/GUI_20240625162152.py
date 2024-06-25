@@ -14,6 +14,7 @@ from PIL import ImageTk, Image
 
 class GUI:
     def __init__(self):
+        self.display_size = 720
         self.video_processing = VideoProcessing()
         self.predict = GetScores()
         
@@ -104,7 +105,7 @@ class GUI:
 
     def _game_screen(self):
         self.player_frame.destroy()
-
+        
         if self.demo_mode.get():
             self.display_size = 500
         else:
