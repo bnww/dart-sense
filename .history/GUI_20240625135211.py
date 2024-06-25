@@ -112,10 +112,10 @@ class GUI:
         
         # change style for buttons to use Helvetica font
         s = ttk.Style()
-        s.configure('TButton', font=('Helvetica', 9))
-        s.configure('TCheckbutton', font=('Helvetica', 9))
-        s.configure('TRadiobutton', font=('Helvetica', 9))
-        s.configure('TLabel', font=('Helvetica', 9))
+        s.configure('TButton', font=('Helvetica', 10))
+        s.configure('TCheckbutton', font=('Helvetica', 10))
+        s.configure('TRadiobutton', font=('Helvetica', 10))
+        s.con
 
         # scorecard
         ttk.Label(self.mainframe, text=f'Race to {self.scorer.num_legs}', font=self.heading_font).grid(column=1, row=1, sticky=W)
