@@ -151,10 +151,6 @@ class GUI:
         self.visit_label.grid(column=5, row=2, sticky=W)
         
         self.display_type = StringVar(self.mainframe, value='imageplane')
-
-        self.display_predictions = BooleanVar(self.mainframe, True)
-        self.display_labels = BooleanVar(self.mainframe, False)
-        
         if not self.demo_mode.get():
             # radio buttons for display transformed, regular and live
             ttk.Label(self.mainframe, text="Display:", underline=0).grid(column=7, row=1, sticky=W)

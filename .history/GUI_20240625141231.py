@@ -58,7 +58,7 @@ class GUI:
 
         # create widget for ip webcam source
         ttk.Label(self.menu_frame, text="Webcam IP:").grid(column=1, row=6, sticky=W)
-        self.ip = StringVar(self.menu_frame, "192.168.0.56:8080")
+        self.ip = StringVar(self.menu_frame, "192.168.0.57:8080")
         ip_entry = ttk.Entry(self.menu_frame, width=15, textvariable=self.ip)
         ip_entry.grid(column=2, row=6, sticky=(W, E))
 
@@ -124,6 +124,11 @@ class GUI:
         s.configure('TRadiobutton', font=('Helvetica', 9))
         s.configure('TLabel', font=('Helvetica', 9))
 
+        if self.demo_mode.get():
+            visibility = 'hidden'
+        else:
+            visibility = 'normal'
+
         # scorecard
         ttk.Label(self.mainframe, text=f'Race to {self.scorer.num_legs}', font=self.heading_font).grid(column=1, row=1, sticky=W)
         ttk.Label(self.mainframe, text="Legs", font=self.heading_font).grid(column=2, row=1, sticky=W)
@@ -150,42 +155,39 @@ class GUI:
         self.visit_label = ttk.Label(self.mainframe, font=self.current_player_font)
         self.visit_label.grid(column=5, row=2, sticky=W)
         
+        # radio buttons for display transformed, regular and live
+        ttk.Label(self.mainframe, text="Display:", underline=0).grid(column=7, row=1, sticky=W)
         self.display_type = StringVar(self.mainframe, value='imageplane')
+        original_button = ttk.Radiobutton(self.mainframe, text='Original', variable=self.display_type, value='imageplane')
+        transform_button = ttk.Radiobutton(self.mainframe, text='Transformed', variable=self.display_type, value='boardplane')
+        live_button = ttk.Radiobutton(self.mainframe, text='Live', variable=self.display_type, value='live')
+
+        original_button.grid(column=7, row=2, sticky=W)
+        transform_button.grid(column=7, row=3, sticky=W)
+        live_button.grid(column=7, row=4, sticky=W)
 
         self.display_predictions = BooleanVar(self.mainframe, True)
-        self.display_labels = BooleanVar(self.mainframe, False)
+        self.display_labels = BooleanVar(self.mainframe, True)
         
-        if not self.demo_mode.get():
-            # radio buttons for display transformed, regular and live
-            ttk.Label(self.mainframe, text="Display:", underline=0).grid(column=7, row=1, sticky=W)
-            original_button = ttk.Radiobutton(self.mainframe, text='Original', variable=self.display_type, value='imageplane')
-            transform_button = ttk.Radiobutton(self.mainframe, text='Transformed', variable=self.display_type, value='boardplane')
-            live_button = ttk.Radiobutton(self.mainframe, text='Live', variable=self.display_type, value='live')
+        self.fps_label = ttk.Label(self.mainframe)
+        self.fps_label.grid(column=7, row=self.scorer.num_players+4, sticky=W)
 
-            original_button.grid(column=7, row=2, sticky=W)
-            transform_button.grid(column=7, row=3, sticky=W)
-            live_button.grid(column=7, row=4, sticky=W)
+        prediction_button = ttk.Checkbutton(self.mainframe, text="Predictions", variable=self.display_predictions, underline=0)
+        prediction_button.grid(column=1, row=self.scorer.num_players+4, columnspan=2, sticky=W)
 
-            # add button for allowing user to add a dart that hasn't been detected
-            add_button = ttk.Button(self.mainframe, text="Add dart", underline=0, command=lambda: self.video_processing.dart_coords_in_visit.append([0.5, 0.5]) if len(self.video_processing.dart_coords_in_visit) < 3 else None)
-            add_button.grid(column=6, row=1, sticky=W)
+        labels_button = ttk.Checkbutton(self.mainframe, text="Labels", underline=0, variable=self.display_labels)
+        labels_button.grid(column=2, row=self.scorer.num_players+4, columnspan=2, sticky=W)
+        # add button for allowing user to add a dart that hasn't been detected
+        add_button = ttk.Button(self.mainframe, text="Add dart", underline=0, command=lambda: self.video_processing.dart_coords_in_visit.append([0.5, 0.5]) if len(self.video_processing.dart_coords_in_visit) < 3 else None)
+        add_button.grid(column=6, row=1, sticky=W)
 
-            # add button for committing score, in event of bounce-outs
-            commit_button = ttk.Button(self.mainframe, text="Commit score", underline=0, command=lambda: setattr(self.video_processing, 'wait_for_dart_removal', True))
-            commit_button.grid(column=6, row=2, sticky=W)
+        # add button for committing score, in event of bounce-outs
+        commit_button = ttk.Button(self.mainframe, text="Commit score", underline=0, command=lambda: setattr(self.video_processing, 'wait_for_dart_removal', True))
+        commit_button.grid(column=6, row=2, sticky=W)
 
-            # button for saving image and labels in YOLO format
-            save_button = ttk.Button(self.mainframe, text="Save data", underline=0, command=self.save_data)
-            save_button.grid(column=6, row=3, sticky=W)
-
-            self.fps_label = ttk.Label(self.mainframe)
-            self.fps_label.grid(column=7, row=self.scorer.num_players+4, sticky=W)
-
-            prediction_button = ttk.Checkbutton(self.mainframe, text="Predictions", variable=self.display_predictions, underline=0)
-            prediction_button.grid(column=1, row=self.scorer.num_players+4, columnspan=2, sticky=W)
-
-            labels_button = ttk.Checkbutton(self.mainframe, text="Labels", underline=0, variable=self.display_labels)
-            labels_button.grid(column=2, row=self.scorer.num_players+4, columnspan=2, sticky=W)
+        # button for saving image and labels in YOLO format
+        save_button = ttk.Button(self.mainframe, text="Save data", underline=0, command=self.save_data)
+        save_button.grid(column=6, row=3, sticky=W)
 
         # assign key bindings for buttons
         self.root.bind('<Escape>', lambda e: self.root.quit())
@@ -368,9 +370,7 @@ class GUI:
         else:
             self.visit_label.configure(text=f'{", ".join(darts)} = {score}')
         self.visit_label.grid_configure(row=self.scorer.current_player+2)
-        
-        if not self.demo_mode.get():
-            self.fps_label.configure(text=f'FPS: {str(fps)}')
+        self.fps_label.configure(text=f'FPS: {str(fps)}')
 
         for i in range(self.scorer.num_players):
             if i == self.scorer.current_player:
@@ -423,11 +423,10 @@ class GUI:
                 dart_coords = (np.round(dart_coords*self.display_size)).astype(int) # convert to pixel coords
 
             self.canvas_calibration = []
-            if not self.demo_mode.get():
-                for coords in calibrations_to_plot:
-                    x,y = coords
-                    oval = self.canvas.create_oval(x - 3, y - 3, x + 3, y + 3, fill="", outline="white", width=1)
-                    self.canvas_calibration.append(oval)
+            for coords in calibrations_to_plot:
+                x,y = coords
+                oval = self.canvas.create_oval(x - 3, y - 3, x + 3, y + 3, fill="", outline="white", width=1)
+                self.canvas_calibration.append(oval)
             
             self.canvas_darts = {'ovals':[], 'texts':[], 'borders':[]}  # Store references to the ovals, texts and borders used to annotate the darts
             for i, coords in enumerate(dart_coords):
