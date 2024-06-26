@@ -25,6 +25,8 @@ class VideoProcessing:
                 self.scorer.read_score(score)
 
             self.wait_for_dart_removal = True
+        else:
+            self.wait_for_dart_removal = False
 
         if (remaining == 0 and darts[-1][0] != 'D') or remaining == 1 or remaining < 0:
             remaining = 'BUST'

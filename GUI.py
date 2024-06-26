@@ -117,9 +117,9 @@ class GUI:
         self.canvas = Canvas(self.mainframe, width=self.display_size, height=self.display_size)
         self.canvas.grid(column=1, row=self.scorer.num_players+5, columnspan=8, rowspan=8)
 
-        self.heading_font = font.Font(family='Helvetica', size=12, underline=True)
-        self.current_player_font = font.Font(family='Helvetica', size=12, weight='bold')
-        self.text_font = font.Font(family='Helvetica', size=12)
+        self.heading_font = font.Font(family='Helvetica', size=13, underline=True)
+        self.current_player_font = font.Font(family='Helvetica', size=13, weight='bold')
+        self.text_font = font.Font(family='Helvetica', size=13)
         
         # change style for buttons to use Helvetica font
         s = ttk.Style()
@@ -173,18 +173,6 @@ class GUI:
             transform_button.grid(column=7, row=3, sticky=W)
             live_button.grid(column=7, row=4, sticky=W)
 
-            # add button for allowing user to add a dart that hasn't been detected
-            add_button = ttk.Button(self.mainframe, text="Add dart", underline=0, command=lambda: self.video_processing.dart_coords_in_visit.append([0.5, 0.5]) if len(self.video_processing.dart_coords_in_visit) < 3 else None)
-            add_button.grid(column=6, row=1, sticky=W)
-
-            # add button for committing score, in event of bounce-outs
-            commit_button = ttk.Button(self.mainframe, text="Commit score", underline=0, command=lambda: setattr(self.video_processing, 'wait_for_dart_removal', True))
-            commit_button.grid(column=6, row=2, sticky=W)
-
-            # button for saving image and labels in YOLO format
-            save_button = ttk.Button(self.mainframe, text="Save data", underline=0, command=self.save_data)
-            save_button.grid(column=6, row=3, sticky=W)
-
             self.fps_label = ttk.Label(self.mainframe)
             self.fps_label.grid(column=7, row=self.scorer.num_players+4, sticky=W)
 
@@ -193,7 +181,18 @@ class GUI:
 
             labels_button = ttk.Checkbutton(self.mainframe, text="Labels", underline=0, variable=self.display_labels)
             labels_button.grid(column=2, row=self.scorer.num_players+4, columnspan=2, sticky=W)
+        
+        # add button for allowing user to add a dart that hasn't been detected
+        add_button = ttk.Button(self.mainframe, text="Add dart", underline=0, command=lambda: self.video_processing.dart_coords_in_visit.append([0.5, 0.5]) if len(self.video_processing.dart_coords_in_visit) < 3 else None)
+        add_button.grid(column=6, row=1, sticky=W)
 
+        # add button for committing score, in event of bounce-outs
+        commit_button = ttk.Button(self.mainframe, text="Commit score", underline=0, command=lambda: setattr(self.video_processing, 'wait_for_dart_removal', True))
+        commit_button.grid(column=6, row=2, sticky=W)
+
+        # button for saving image and labels in YOLO format
+        save_button = ttk.Button(self.mainframe, text="Save data", underline=0, command=self.save_data)
+        save_button.grid(column=6, row=3, sticky=W)
         # assign key bindings for buttons
         self.root.bind('<Escape>', lambda e: self.root.quit())
         self.root.bind('d', lambda e: transform_button.invoke() if self.display_type.get() == 'imageplane' else original_button.invoke() if self.display_type.get() == 'live' else live_button.invoke())
