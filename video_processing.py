@@ -157,6 +157,6 @@ if __name__ == "__main__":
     pass
     #game = GameLogic(ruleset='x01', player_names=['Ben'], x01=1001, num_legs=1)
     #AI_scorer = VideoDetection()
-    #AI_scorer.start("192.168.0.57:8080", game, np.array((1200, 1600)))
+    #AI_scorer.start("192.168.0.68:8080", game, np.array((1200, 1600)))
     #AI_scorer.start("external", game)
     #AI_scorer.start("webcam", game)
