@@ -65,8 +65,11 @@ You Only Look Once (YOLO) object detection was used to detect the landing positi
 darts as well as 4 dart board calibration points. YOLOv8n was
 used as this has the best benchmark results, and the nano size was used as it is important that the model is able to run in real time.
 
-Model tuning is crucial in order to get the best results. Manual experiments and using YOLO’s
-tuning algorithm were used to find the best hyperparameters for training. The YOLOv8 genetic tuning algorithm was used to find the best hyperparameters for the model over many iterations. The model was tuned for 134 iterations each consisting of 25 epochs. For each iteration, the fitness of the hyperparameters is evaluated based on the performance of the model.
+Model tuning is crucial in order to get the best results. Manual experiments and using YOLO’s tuning algorithm were used to find the best hyperparameters for training. The YOLOv8 genetic tuning algorithm was used to find the best hyperparameters for the model over many iterations. The model was tuned for 134 iterations each consisting of 25 epochs. For each iteration, the fitness of the hyperparameters is evaluated based on the performance of the model.
+
+Comparing the F1 scores for a model using trained hyperparameters compared to the default values shows the benefits of tuning (shown below). D5 is an especially difficult dataset, taken from a unique video. No data from D5 was used to train the model, so the much improved performance on this data set is indicative of a model that can generalise effectively. This is likely due to the data augmentation being used in the tuned model. It used image rotation, scaling, translation and brightness/contrast adjustments.
+
+![alt text](images\hyperparameters.png)
 
 ### Score Prediction
 In order to use the predicted dart locations from the YOLO model, the coordinates need to be contextualised with reference to some measure of the standardised dart board dimensions. The standardised dimensions of the dart board were used to generate coordinates for 4 calibration points around the board. The chosen points are the upper left corner of the double segments for the 20, 6, 3 and 11, illustrated in 3.2b. The YOLO model is trained to
@@ -85,7 +88,12 @@ Results were evaluated based on the following custom metrics:
 The final model was trained for 100 epochs with the YOLOv8n (nano) architecture using
 tuned hyperparameters and a batch size of 79.
 
-Here are the results:
+Here are the final results on test data:
 | Image PCS | Precision | Recall | Missed | Extra |
 |-----------|-----------|--------|--------|-------|
 | 0.884     | 0.977     | 0.942  | 0.040  | 0.004 |
+
+The main failure cases are due to dart obfuscation. To an extent it becomes an impossible task, as even humans can't be 100% sure of a dart's score, and rely on moving in order to get a better viewpoint. I do believe that with more data to train the model this can imperove further and it will be able to exceed human performance on the task.
+
+Here is an example where a dart is missed as the tip cannot be seen:
+![alt text](images/1258_171023_581.png)
