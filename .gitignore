@@ -12,4 +12,4 @@ venv/
 .env/
 # IDE settings
 .idea/
-.vscode/
+.vscode/.history/
