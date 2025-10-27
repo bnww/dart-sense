@@ -5,10 +5,10 @@ import numpy as np
 import time
 
 class VideoProcessing:
-    def __init__(self, model_dir="weights.pt"):
+    def __init__(self, model_dir="weights/weights.onnx"):
         self.model = YOLO(model_dir)
         self.predict = GetScores(model_dir)
-    
+
     def _distance(self, coord1, coord2):
         return np.sqrt(np.sum((coord1 - coord2) ** 2))
 
