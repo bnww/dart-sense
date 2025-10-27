@@ -2,3 +2,14 @@
 #/data/labels/*
 GUI_colour_scores.py
 .idea
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+# Virtual environments
+venv/
+.env/
+# IDE settings
+.idea/
+.vscode/
