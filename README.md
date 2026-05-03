@@ -1,11 +1,12 @@
 # Dart Sense
+## [Live Demo: A leg of 301](https://www.youtube.com/watch?v=8a97sVmbqY0)
+[![Live Demo: Automated Dart Scoring](https://img.youtube.com/vi/8a97sVmbqY0/0.jpg)]([https://www.youtube.com/watch?v=8a97sVmbqY0])
+
 This project is licensed for non-commercial, non-distributable use only. Please contact me if you'd like to use it beyond personal experimentation.
 ## Description
 Dart Sense is an automatic dart scoring application. It uses a sophisticated deep learning-based computer vision model to track the landing coordinates of darts and 4 board calibration points in an image in order to predict the scores for each dart. This app can be used to score a game of darts in real time using video streamed from a smartphone.
 
 A YOLOv8 object detection model was trained to detect dart positions and board calibration points. By comparing the coordinates of the calibration points in an image to the standardised dart board dimensions, you can then transform the image, allowing any set of coordinates to be mapped to a darts score. I developed this system for my Artifical Intelligence Msc Dissertation project. Since completing my studies, I have continued to work on this project, collecting more data to further improve the model and developing a fully functional GUI to run the system in real time, with added game logic to be able to play a game of darts with real players without the burden of scoring it yourself. Please see a video demonstration of the app below!
-
-## [Video Demonstration of app](https://www.youtube.com/watch?v=8a97sVmbqY0)
 
 ## Setup
 1. Clone the repository: `git clone https://github.com/bnww/dart-sense.git`
