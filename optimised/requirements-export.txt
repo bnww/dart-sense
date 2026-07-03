@@ -1,0 +1,6 @@
+# Only needed to (re)run export_model.py / benchmark.py's ground-truth
+# comparison. Not needed on the device that runs the optimised pipeline.
+ultralytics>=8.2
+torch>=2.0
+onnx>=1.14
+onnxslim
