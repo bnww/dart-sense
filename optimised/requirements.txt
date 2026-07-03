@@ -1,0 +1,7 @@
+# Runtime dependencies only - no torch, no ultralytics.
+# This is what needs to be installed on the low-end device that actually
+# scores images/video (Raspberry Pi, old laptop, etc.)
+onnxruntime>=1.17
+opencv-python-headless>=4.9
+numpy>=1.24
+pillow>=10.0

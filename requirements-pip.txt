@@ -1,0 +1,17 @@
+ultralytics==8.2.5
+torch==2.3.0
+torchvision==0.18.0
+opencv-python==4.9.0.80
+numpy==1.24.3
+pandas==2.0.3
+pillow==10.3.0
+matplotlib==3.7.5
+scipy==1.10.1
+pyttsx3==2.90
+pywin32==306
+pypiwin32==223
+comtypes==1.4.1
+sounddevice==0.4.6
+requests==2.31.0
+pyyaml==6.0.1
+tqdm==4.66.2
